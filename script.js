@@ -1,7 +1,8 @@
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
-const todoList = document.querySelector('.todo-list')
-
+const todoList = document.querySelector('.todo-list');
+var removeTodo = document.querySelectorAll('img');
+const completedAll = document.querySelector('.allcomplete-btn');
 
 // Add New Todo
 addButton.addEventListener('click', () => {
@@ -25,5 +26,17 @@ addButton.addEventListener('click', () => {
         //adding to main
         todoList.append(div)
         todoValue.value = ""
+        updateTodo();
     } 
 })
+
+
+//Remove Todo
+const updateTodo = () => {
+    removeTodo = document.querySelectorAll('img');
+    removeTodo.forEach(todo => {
+        todo.addEventListener('click', (e) => {
+            e.target.parentNode.remove()
+        })
+    })
+}
