@@ -84,3 +84,5 @@ completedAll.addEventListener('click', () => {
 
 //Initializing calls
 check();
+removeTodo();
+completeTodo();
