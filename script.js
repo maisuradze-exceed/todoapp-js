@@ -3,86 +3,94 @@ const todoValue = document.querySelector('.todo-value');
 const todoList = document.querySelector('.todo-list');
 const completedAll = document.querySelector('.allcomplete-btn');
 let remove = document.querySelectorAll('img');
-let checkComplete = document.querySelectorAll('.check')
+let checkComplete = document.querySelectorAll('.check');
 
 // Add New Todo
 addButton.addEventListener('click', () => {
-    if (todoValue.value.length !== 0) {
-        let value = todoValue.value;
-        let div = document.createElement('div');
-        div.className = 'todo-item';
-        //creating p element
-        let p = document.createElement('p')
-        p.innerHTML = value;
-        //creating checkbox
-        let checkbox = document.createElement('input')
-        checkbox.type = 'checkbox'
-        checkbox.className = 'check'
-        // creating image
-        let image = document.createElement('img')
-        image.src = "./img/remove.png"
-        //appending into div
-        div.append(checkbox)
-        div.append(p)
-        div.append(image)
-        //adding to main
-        todoList.append(div)
-        todoValue.value = ""
-        updateTodo();
-    } 
-})
-
-
+  if (todoValue.value.length) {
+    let value = todoValue.value;
+    let div = document.createElement('div');
+    div.className = 'todo-item';
+    //creating p element
+    let p = document.createElement('p');
+    p.innerHTML = value;
+    //creating checkbox
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'check';
+    // creating image
+    let image = document.createElement('img');
+    image.src = './img/remove.png';
+    //appending into div
+    div.append(checkbox);
+    div.append(p);
+    div.append(image);
+    //adding to main
+    todoList.append(div);
+    todoValue.value = '';
+    updateTodo();
+  }
+});
 
 const updateTodo = () => {
-
-    //Complete Todo
-    removeTodo();
-    completeTodo();
-    check();
-}
+  //Complete Todo
+  removeTodo();
+  completeTodo();
+};
 
 //Remove Todo
 const removeTodo = () => {
-    remove = document.querySelectorAll('img');
-    remove.forEach(todo => {
-        todo.addEventListener('click', (event) => {
-            event.target.parentNode.remove()
-        })
+  remove = document.querySelectorAll('img');
+  remove.forEach(todo => {
+    todo.addEventListener('click', event => {
+      event.target.parentNode.remove();
     });
-}
+  });
+};
 
 // Complete Todo
 const completeTodo = () => {
-    checkComplete = document.querySelectorAll('.check')
-    checkComplete.forEach(check => {
-        check.addEventListener('change', (event) => {
-            if (event.target.checked) {
-                event.target.parentNode.children[1].className = 'done'
-            } else {
-                event.target.parentNode.children[1].className = ''
-            }
-        })
+  checkComplete = document.querySelectorAll('.check');
+  checkComplete.forEach(check => {
+    check.addEventListener('change', event => {
+      if (event.target.checked) {
+        event.target.parentNode.children[1].className = 'done';
+      } else {
+        event.target.parentNode.children[1].className = '';
+      }
     });
-}
+  });
+};
 
-
-//Complete All
-const check = () => 
-completedAll.addEventListener('click', () => {
+//Check if complete
+const check = () => {
+  let unchecked = true;
+  completedAll.addEventListener('click', () => {
+    if (unchecked) {
+      completedAll.innerHTML = 'Uncomplete All';
+      unchecked = false;
+      selectAll();
+    } else {
+      completedAll.innerHTML = 'Complete All';
+      unchecked = true;
+      UnSelectAll();
+    }
+  });
+  const selectAll = () => {
     checkComplete.forEach(check => {
-        check.parentNode.children[0].checked = true;
-        check.parentNode.children[1].className = 'done';
-    })
-})
-
-
-
-
-
-
+      check.checked = true;
+      check.parentNode.children[1].className = 'done';
+    });
+  };
+  const UnSelectAll = () => {
+    checkComplete.forEach(check => {
+      check.checked = false;
+      check.parentNode.children[1].className = '';
+    });
+  };
+};
 
 //Initializing calls
-check();
 removeTodo();
+check();
 completeTodo();

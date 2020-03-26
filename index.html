@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="addtodo">
-        <input placeholder="Add Todo..." type="text" class="todo-value"/>
-        <button class="addtodo-btn">Add Todo</button>
-        <button class="allcomplete-btn">Completed All</button>
+      <input
+        required
+        placeholder="Add Todo..."
+        type="text"
+        class="todo-value"
+      />
+      <button class="addtodo-btn">Add Todo</button>
+      <button class="allcomplete-btn">Complete All</button>
     </div>
     <div class="todo-list">
-        <div class="todo-item">
-            <input class="check" type="checkbox" />
-            <p>Learn React</p>
-            <img src="./img/remove.png"/>
-        </div>
-        <div class="todo-item">
-            <input class="check" type="checkbox" />
-            <p>Learn JSX</p>
-            <img src="./img/remove.png" />
-        </div>
-        <div class="todo-item">
-            <input class="check" type="checkbox" />
-            <p>Learn Python</p>
-            <img src="./img/remove.png" />
-        </div>
+      <div class="todo-item">
+        <input class="check" type="checkbox" />
+        <p>Learn React</p>
+        <img src="./img/remove.png" />
+      </div>
+      <div class="todo-item">
+        <input class="check" type="checkbox" />
+        <p>Learn JSX</p>
+        <img src="./img/remove.png" />
+      </div>
+      <div class="todo-item">
+        <input class="check" type="checkbox" />
+        <p>Learn Python</p>
+        <img src="./img/remove.png" />
+      </div>
     </div>
     <script src="./script.js"></script>
-</body>
+  </body>
 </html>
