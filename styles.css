@@ -183,3 +183,40 @@ input[type='checkbox']:focus {
   margin-left: auto;
   visibility: hidden;
 }
+
+.pagination {
+  display: flex;
+  width: 50%;
+  margin: auto;
+  height: 100%;
+  align-items: center;
+}
+
+.pagination > button {
+  box-shadow: inset 0px 1px 0px 0px #e184f3;
+  background: #a20dbd;
+  border-radius: 6px;
+  border: 1px solid #a511c0;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+  padding: 6px 12px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #9b14b3;
+}
+
+.pagination > button:focus {
+  outline: 0;
+}
+
+.pagination > button:hover {
+  background: linear-gradient(to bottom, #c123de 5%, #a20dbd 100%);
+}
+
+.pagination > .active {
+  border: 2px solid magenta;
+}
