@@ -9,6 +9,7 @@ let save = document.querySelectorAll('.edit-text');
 let text = document.querySelectorAll('.text');
 let unchecked = true;
 let pagination = document.querySelectorAll('.todo-item');
+let pag = document.querySelector('.todo-list');
 let myArr = [];
 let paginationNum = document.querySelector('.pagination');
 let current_page = 1;
@@ -31,7 +32,6 @@ const displayList = (items, wrapper, rows_per_page, page) => {
 
 const setupPagination = (items, wrapper, rows_per_page) => {
   wrapper.innerHTML = '';
-  console.log(wrapper);
   let page_count = Math.ceil(items.length / rows_per_page);
   for (let i = 1; i < page_count + 1; i++) {
     let btn = paginationButton(i, items);
@@ -51,8 +51,7 @@ const paginationButton = (page, items) => {
     displayList(items, todoList, rows, current_page);
 
     let current_btn = document.querySelector('.active');
-    current_btn.classList.remove('active');
-
+    if (current_btn !== null) current_btn.classList.remove('active');
     button.classList.add('active');
   });
 
@@ -66,6 +65,8 @@ setupPagination(myArr, paginationNum, rows);
 addButton.addEventListener('click', () => {
   if (todoValue.value.length && todoValue.value.trim().length) {
     template();
+    removeTodo();
+    editTodo();
   } else {
     todoValue.value = '';
   }
@@ -75,23 +76,32 @@ todoValue.addEventListener('keyup', event => {
   if (event.keyCode === 13 && todoValue.value.length) {
     if (todoValue.value.trim().length) {
       template();
+      removeTodo();
+      editTodo();
     } else {
       todoValue.value = '';
     }
   }
 });
 
-const updateTodo = () => {};
-
 //Remove Todo
 const removeTodo = () => {
   let myArr1 = myArr;
-  myArr1.forEach((todo, index) => {
-    todo.children[2].children[1].addEventListener('click', () => {
-      myArr1.splice(index, 1);
-      updateTodoArray(myArr1);
-    });
+  myArr1.forEach(todo => {
+    todo.children[2].children[1].addEventListener('click', removeLogic);
   });
+};
+
+const removeLogic = index => {
+  let button = document.querySelector('.active');
+  console.log(button);
+  if (button !== null) {
+    let myArr1 = myArr;
+    myArr1.splice(index, 1);
+    updateTodoArray(myArr1);
+  } else {
+    console.log('mushaobs');
+  }
 };
 
 const updateTodoArray = value => {
@@ -101,9 +111,9 @@ const updateTodoArray = value => {
 
 //Edit Todo
 const editTodo = () => {
-  edit = document.querySelectorAll('.edit');
-  edit.forEach(todo => {
-    todo.addEventListener('click', editLogic);
+  let myArr1 = myArr;
+  myArr1.forEach(todo => {
+    todo.children[2].children[0].addEventListener('click', editLogic);
   });
 };
 
