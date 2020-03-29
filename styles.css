@@ -286,10 +286,14 @@ input[type='checkbox']:focus {
   }
 }
 
-@media only screen and (max-width: 998px) {
+@media only screen and (max-width: 1024px) {
+  .text {
+    font-size: 25px;
+  }
   .todo-item {
     width: 100%;
-    font-size: 25px;
+    font-size: 35px;
+    padding: 25px 15px 0;
   }
   .todo-list {
     margin: 0;
@@ -318,6 +322,12 @@ input[type='checkbox']:focus {
     width: 100%;
     height: 100%;
   }
+  .addtodo-btn {
+    height: 60px;
+  }
+  .todo-value {
+    height: 54px;
+  }
 }
 
 @media only screen and (max-width: 514px) {
@@ -341,7 +351,9 @@ input[type='checkbox']:focus {
     width: 100%;
   }
   .todo-item {
-    width: 70%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     border-bottom: 1px solid #cecece;
   }
   .images > .edit,
@@ -367,5 +379,101 @@ input[type='checkbox']:focus {
   .pagination > button {
     width: 30px;
     height: 30px;
+  }
+  .allcomplete-btn {
+    height: 35px;
+  }
+  .delete-complete-btn {
+    height: 35px;
+  }
+  .addtodo-btn {
+    height: 26px;
+  }
+  .todo-value {
+    height: 20px;
+  }
+  .images > .edit {
+    width: 23px;
+    height: 23px;
+    opacity: 0.3;
+  }
+  .images > .remove {
+    width: 23px;
+    height: 23px;
+    opacity: 0.3;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .text {
+    font-size: 10px;
+  }
+  .todo-item {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #cecece;
+  }
+  .addtodo-btn {
+    width: 40%;
+    font-size: 11px;
+  }
+  .todo-value {
+    width: 90%;
+    height: 29px;
+    font-size: 11px;
+  }
+  .todo-list {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+  .btn-div {
+    width: 100%;
+  }
+
+  .images > .edit {
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+  }
+  .images > .remove {
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+  }
+  .text-save {
+    margin: 0;
+  }
+  .edit-text {
+    width: 70%;
+    height: 60%;
+  }
+  .save-button {
+    width: 30%;
+    height: 60%;
+  }
+  .addtodo-btn {
+    width: 40%;
+  }
+  .pagination > button {
+    width: 35px;
+    height: 35px;
+  }
+  .addtodo-btn {
+    height: 26px;
+  }
+  .todo-value {
+    height: 20px;
+  }
+  .allcomplete-btn {
+    height: 35px;
+  }
+  .delete-complete-btn {
+    height: 35px;
+  }
+  .pagination {
+    margin-bottom: 15px;
   }
 }
