@@ -13,37 +13,23 @@ let pag = document.querySelector('.todo-list');
 let paginationNum = document.querySelector('.pagination');
 let current_page = 1;
 let rows = 10;
-let myArr = [];
+var myArr = [];
 let unchecked = true;
 
 // Add New Todo
 addButton.addEventListener('click', () => {
-  if (todoValue.value.length && todoValue.value.trim().length) {
-    template();
-    removeTodo();
-    editTodo();
-    completeTodo();
-    deleteCompletedLogic();
-  } else {
-    todoValue.value = '';
-  }
+  if (todoValue.value.length && todoValue.value.trim().length) template();
+  else todoValue.value = '';
 });
 
 todoValue.addEventListener('keyup', event => {
   if (event.keyCode === 13 && todoValue.value.length) {
-    if (todoValue.value.trim().length) {
-      template();
-      removeTodo();
-      editTodo();
-      completeTodo();
-      deleteCompletedLogic();
-    } else {
-      todoValue.value = '';
-    }
+    if (todoValue.value.trim().length) template();
+    else todoValue.value = '';
   }
 });
 
-//Remove Todo
+//Delete Todo
 const removeLogic = () => {
   index = [...myArr].indexOf(event.target.parentElement.parentElement);
   let arr = document.querySelector('.todo-list');
@@ -58,9 +44,10 @@ const removeLogic = () => {
       todosControl(current_page, myArr1);
     }
   } else {
-    let myArr1 = myArr.filter(Boolean);
     myArr.pop();
+    let myArr1 = myArr.filter(Boolean);
     updateTodoArray(myArr1);
+    hideShow(myArr1);
   }
 };
 
@@ -71,21 +58,32 @@ const removeTodo = () => {
   });
 };
 
-//Delete Complete
+//Delete Completed
+const goBackOnce = () => {
+  myArr1 = myArr.filter(Boolean);
+  pagination = document.querySelectorAll('.todo-item').length;
+  if (!pagination && myArr1.length)
+    document.querySelector('.pagination').children[0].click();
+};
 
 const deleteCompletedLogic = () => {
-  myArr.map((arr, index) => {
+  let myArr1 = myArr;
+  myArr1.map((arr, index) => {
     if (arr.children[0].checked) {
-      delete myArr[index];
+      delete myArr1[index];
     }
   });
-  let myArr1 = myArr.filter(Boolean);
-  updateTodoArray(myArr1);
+  let arr = myArr1.filter(Boolean);
+  updateTodoArray(arr);
+  hideShow(arr);
+  goBackOnce(arr);
 };
 
 const deleteCompleted = () => {
   deleteComplete.addEventListener('click', deleteCompletedLogic);
 };
+
+// Complete Todo
 
 const todosControl = (page, data) => {
   let ans = page - 1;
@@ -105,7 +103,6 @@ const paginationBtn = (page, data, button) => {
   if (display) document.querySelector('.active').click();
 };
 
-// Complete Todo
 const completeTodo = () => {
   let myArr1 = myArr;
   myArr1.forEach(single => {
@@ -123,38 +120,44 @@ const completeTodo = () => {
   });
 };
 
-// //Check if complete
-// const checkTodo = () => {
-//   save = document.querySelectorAll('.edit-text');
-//   completedAll.addEventListener('click', () => {
-//     if (unchecked) {
-//       unchecked = false;
-//       selectAll();
-//     } else {
-//       unchecked = true;
-//       unSelectAll();
-//     }
-//   });
-//   const selectAll = () => {
-//     checkComplete.forEach(check => {
-//       save = document.querySelectorAll('.edit-text');
-//       if (!save.length) {
-//         check.checked = true;
-//         check.parentNode.children[1].className = 'done';
-//         completedAll.innerHTML = 'Uncomplete All';
-//       }
-//     });
-//   };
-//   const unSelectAll = () => {
-//     checkComplete.forEach(check => {
-//       if (!save.length) {
-//         check.checked = false;
-//         check.parentNode.children[1].className = '';
-//         completedAll.innerHTML = 'Complete All';
-//       }
-//     });
-//   };
-// };
+// Check if complete
+const checkTodo = () => {
+  completedAll.addEventListener('click', checkTodoLogic);
+};
+
+const checkTodoLogic = () => {
+  let arr = [];
+  save = document.querySelectorAll('.todo-item');
+  save.forEach(saved => {
+    arr.push(saved.children[0].checked);
+  });
+  let checker = arr => arr.every(v => v === true);
+  if (!checker(arr)) {
+    save.forEach(single => {
+      if (single.children[0].checked === false) {
+        single.children[0].checked = true;
+        single.children[1].classList.add('done');
+      }
+    });
+  } else {
+    save.forEach(single => {
+      if (single.children[0].checked === true) {
+        single.children[0].checked = false;
+        single.children[1].classList.remove('done');
+      }
+    });
+  }
+  checkTodoHTML();
+};
+
+const checkTodoHTML = () => {
+  let arr = [];
+  save = document.querySelectorAll('.todo-item');
+  save.forEach(e => arr.push(e.children[0].checked));
+  let checker = arr => arr.every(v => v === true);
+  if (checker(arr)) completedAll.innerHTML = 'Uncomplete All';
+  else completedAll.innerHTML = 'Complete All';
+};
 
 //Edit Todo
 const editTodo = () => {
@@ -190,10 +193,35 @@ const editLogic = () => {
     if (data.trim()) {
       event.target.parentNode.parentNode.children[1].innerHTML = data;
     }
-    console.log(event.target.parentNode.parentNode.children[3]);
     event.target.parentNode.parentNode.children[2].className = 'images';
     event.target.parentNode.parentNode.children[3].remove();
   });
+};
+
+// Show completedAll/Delete Completed Button
+const hideShow = arr => {
+  if (arr.length === 0) {
+    let btn = document.querySelectorAll('.btn-div');
+    btn.forEach(button => button.classList.add('hidden'));
+  }
+};
+
+const showHide = () => {
+  if (myArr.length) {
+    let btn = document.querySelectorAll('.btn-div');
+    btn.forEach(button => button.classList.remove('hidden'));
+  }
+};
+
+const updateTodoArray = (value, page) => {
+  let val = value.filter(Boolean);
+  let myvar = document.querySelector('.todo-list').children.length;
+  if (myvar === 10) {
+    displayList(val, todoList, rows, page);
+    setupPagination(val, paginationNum, rows);
+  }
+  displayList(val, todoList, rows, current_page);
+  setupPagination(val, paginationNum, rows);
 };
 
 //template
@@ -228,18 +256,24 @@ const template = () => {
   myArr.push(div);
   let myvar = document.querySelector('.todo-list').children.length;
   if (myvar === 10) {
-    myArr.filter(Boolean);
-    current_page++;
-    setupPagination(myArr, paginationNum, current_page);
+    updateTodoArray(myArr, current_page++);
   } else {
-    myArr.filter(Boolean);
     updateTodoArray(myArr);
   }
+
   todoValue.value = '';
+  removeTodo();
+  editTodo();
+  completeTodo();
+  deleteCompleted();
+  showHide();
+  checkTodo();
+  checkTodoHTML();
 };
 
 // Pagination
 pagination.forEach(pag => myArr.push(pag));
+
 const displayList = (items, wrapper, rows_per_page, page) => {
   wrapper.innerHTML = '';
   page--;
@@ -276,23 +310,18 @@ const paginationButton = (page, items) => {
     let current_btn = document.querySelector('.active');
     if (current_btn !== null) current_btn.classList.remove('active');
     button.classList.add('active');
+    checkTodoHTML();
   });
 
   return button;
 };
 
-const updateTodoArray = value => {
-  myArr.filter(Boolean);
-  displayList(value, todoList, rows, current_page);
-  setupPagination(value, paginationNum, rows);
-};
-
-displayList(myArr, todoList, rows, current_page);
-setupPagination(myArr, paginationNum, rows);
+updateTodoArray(myArr);
 
 //Initializing calls
 removeTodo();
-// checkTodo();
 completeTodo();
 editTodo();
 deleteCompleted();
+checkTodo();
+checkTodoHTML();
