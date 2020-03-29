@@ -198,6 +198,7 @@ const editLogic = () => {
     event.target.parentNode.parentNode.children[2].className = 'images';
     event.target.parentNode.parentNode.children[3].remove();
   });
+  checkTodoHTML();
 };
 
 // Show completedAll/Delete Completed Button
