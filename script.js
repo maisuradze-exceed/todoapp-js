@@ -111,10 +111,12 @@ const completeTodo = () => {
         event.target.parentElement.children[1].className = 'text done';
         let myArr = myArr1.filter(Boolean);
         updateTodoArray(myArr);
+        checkTodoHTML();
       } else {
         event.target.parentElement.children[1].className = 'text';
         let myArr = myArr1.filter(Boolean);
         updateTodoArray(myArr);
+        checkTodoHTML();
       }
     });
   });
@@ -203,6 +205,7 @@ const hideShow = arr => {
   if (arr.length === 0) {
     let btn = document.querySelectorAll('.btn-div');
     btn.forEach(button => button.classList.add('hidden'));
+    pag.classList.add('hidden');
   }
 };
 
@@ -210,6 +213,7 @@ const showHide = () => {
   if (myArr.length) {
     let btn = document.querySelectorAll('.btn-div');
     btn.forEach(button => button.classList.remove('hidden'));
+    pag.classList.remove('hidden');
   }
 };
 
