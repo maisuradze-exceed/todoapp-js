@@ -213,6 +213,7 @@ const showHide = () => {
   }
 };
 
+// Update After Action
 const updateTodoArray = (value, page) => {
   let val = value.filter(Boolean);
   let myvar = document.querySelector('.todo-list').children.length;
@@ -222,53 +223,6 @@ const updateTodoArray = (value, page) => {
   }
   displayList(val, todoList, rows, current_page);
   setupPagination(val, paginationNum, rows);
-};
-
-//template
-const template = () => {
-  let value = todoValue.value;
-  let div = document.createElement('div');
-  div.className = 'todo-item';
-  //creating p element
-  let p = document.createElement('p');
-  p.innerHTML = value;
-  p.className = 'text';
-  //creating checkbox
-  let checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.className = 'check';
-  // creating image
-  let imagediv = document.createElement('div');
-  let remove = document.createElement('img');
-  let edit = document.createElement('img');
-  imagediv.className = 'images';
-  remove.src = './img/remove.png';
-  remove.className = 'remove';
-  edit.src = './img/edit-icon.png';
-  edit.className = 'edit';
-  imagediv.append(edit);
-  imagediv.append(remove);
-  //appending into div
-  div.append(checkbox);
-  div.append(p);
-  div.append(imagediv);
-  //adding to main
-  myArr.push(div);
-  let myvar = document.querySelector('.todo-list').children.length;
-  if (myvar === 10) {
-    updateTodoArray(myArr, current_page++);
-  } else {
-    updateTodoArray(myArr);
-  }
-
-  todoValue.value = '';
-  removeTodo();
-  editTodo();
-  completeTodo();
-  deleteCompleted();
-  showHide();
-  checkTodo();
-  checkTodoHTML();
 };
 
 // Pagination
@@ -314,6 +268,52 @@ const paginationButton = (page, items) => {
   });
 
   return button;
+};
+
+//template
+const template = () => {
+  let value = todoValue.value;
+  let div = document.createElement('div');
+  div.className = 'todo-item';
+  //creating p element
+  let p = document.createElement('p');
+  p.innerHTML = value;
+  p.className = 'text';
+  //creating checkbox
+  let checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'check';
+  // creating image
+  let imagediv = document.createElement('div');
+  let remove = document.createElement('img');
+  let edit = document.createElement('img');
+  imagediv.className = 'images';
+  remove.src = './img/remove.png';
+  remove.className = 'remove';
+  edit.src = './img/edit-icon.png';
+  edit.className = 'edit';
+  imagediv.append(edit);
+  imagediv.append(remove);
+  //appending into div
+  div.append(checkbox);
+  div.append(p);
+  div.append(imagediv);
+  //adding to main
+  myArr.push(div);
+  let myvar = document.querySelector('.todo-list').children.length;
+  if (myvar === 10) {
+    updateTodoArray(myArr, current_page++);
+  } else {
+    updateTodoArray(myArr);
+  }
+  todoValue.value = '';
+  removeTodo();
+  editTodo();
+  completeTodo();
+  deleteCompleted();
+  showHide();
+  checkTodo();
+  checkTodoHTML();
 };
 
 updateTodoArray(myArr);
