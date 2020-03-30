@@ -225,9 +225,11 @@ const updateTodoArray = (value, page) => {
   if (myvar === 10) {
     displayList(val, todoList, rows, page);
     setupPagination(val, paginationNum, rows);
+    checkTodoHTML();
   }
   displayList(val, todoList, rows, current_page);
   setupPagination(val, paginationNum, rows);
+  checkTodoHTML();
 };
 
 // Pagination
