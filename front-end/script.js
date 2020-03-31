@@ -13,8 +13,7 @@ let pag = document.querySelector('.todo-list');
 let paginationNum = document.querySelector('.pagination');
 let current_page = 1;
 let rows = 10;
-var myArr = [];
-let unchecked = true;
+let myArr = [];
 
 // Add New Todo
 addButton.addEventListener('click', () => {
