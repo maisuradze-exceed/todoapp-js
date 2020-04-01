@@ -5,7 +5,7 @@ const ItemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  isTrue: {
+  isCompleted: {
     type: Boolean,
     default: 'false'
   }

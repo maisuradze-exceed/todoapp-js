@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const data = require('../data');
 const Item = require('../models/Item');
 
 //Get All items
@@ -17,7 +16,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
-    res.send(item);
+    res.json.send(res);
   } catch (err) {
     res.send({ msg: err });
   }
@@ -25,28 +24,15 @@ router.get('/:id', async (req, res) => {
 
 //Create item
 router.post('/', async (req, res) => {
-  // const newItem = {
-  //   id: data.length + 1,
-  //   value: req.body.value,
-  //   isTrue: false
-  // };
-
-  // if (!newItem.value) {
-  //   return res.status(400).json({ msg: 'Value cannot be empty' });
-  // }
-
-  // data.push(newItem);
-  // res.json(data);
-
-  const { value, isTrue } = req.body;
+  const { value, isCompleted } = req.body;
 
   const item = new Item({
     value,
-    isTrue
+    isCompleted
   });
   try {
-    const savedPost = await item.save();
-    res.send(savedPost);
+    const items = await item.save();
+    res.send(items);
   } catch (err) {
     res.json({ msg: err });
   }
@@ -54,25 +40,12 @@ router.post('/', async (req, res) => {
 
 //Update Single item
 router.put('/:id', async (req, res) => {
-  // const found = data.some(element => element.id === parseInt(req.params.id));
-  // if (found) {
-  //   const updItem = req.body;
-  //   data.forEach(element => {
-  //     if (element.id === parseInt(req.params.id)) {
-  //       element.value = updItem.value ? updItem.value : element.value;
-  //       element.isTrue = updItem.isTrue ? updItem.isTrue : element.isTrue;
-  //       res.json({ msg: 'Item updated', element });
-  //     }
-  //   });
-  // } else {
-  //   res.status(400).json({ msg: `No Item with id ${req.params.id}` });
-  // }
-  const { value, isTrue } = req.body;
+  const { value, isCompleted } = req.body;
   try {
     const editedItem = await Item.updateOne(req.body.id, {
       $set: {
         value,
-        isTrue: isTrue || false
+        isCompleted: isCompleted || false
       }
     });
     res.send(editedItem);
@@ -83,18 +56,8 @@ router.put('/:id', async (req, res) => {
 
 //Delete Single item
 router.delete('/:id', async (req, res) => {
-  // const found = data.some(element => element.id === parseInt(req.params.id));
-
-  // if (found) {
-  //   res.json({
-  //     msg: 'Deleted',
-  //     data: data.filter(element => element.id !== parseInt(req.params.id))
-  //   });
-  // } else {
-  //   res.status(400).json({ msg: `No Item with id ${req.params.id}` });
-  // }
   try {
-    const removedItem = await Item.deleteOne(req.body.id);
+    const removedItem = await Item.findByIdAndDelete(req.params.id);
     res.send(removedItem);
   } catch (err) {
     res.send({ msg: err });
