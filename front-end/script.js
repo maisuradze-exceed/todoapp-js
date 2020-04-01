@@ -4,56 +4,15 @@ const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
 let checkedTodo = document.querySelectorAll('.check');
 let paginationNum = document.querySelector('.pagination');
-let removeTodo = document.querySelectorAll('.remove');
+let removeTodoBtn = document.querySelectorAll('.remove');
 const rows = 10;
 let current_page = 1;
 let myArr = [];
-
-const loadFirstTime = () => {
-  main.innerHTML = 'Loading...';
-
-  axios
-    .get('http://localhost:3000/list')
-    .then(response => myArr.push(response.data));
-
-  setTimeout(() => {
-    if (myArr[0].length) {
-      template(myArr[0]);
-    } else {
-      main.innerHTML = '<h1>Nothing to do...</h1>';
-    }
-  }, 600);
-};
-
-const getTodos = () => {
-  myArr = [];
-  axios
-    .get('http://localhost:3000/list')
-    .then(response => myArr.push(response.data));
-  setTimeout(() => {
-    if (myArr[0].length) {
-      template(myArr[0]);
-    } else {
-      main.innerHTML = '<h1>Nothing to do...</h1>';
-    }
-  }, 300);
-};
-
-const addTodos = todovalue => {
-  axios
-    .post('http://localhost:3000/list', {
-      value: todovalue
-    })
-    .then(response => {
-      myArr[0].push(response.data);
-    });
-};
 
 // Add New Todo
 addButton.addEventListener('click', () => {
   if (todoValue.value.length && todoValue.value.trim().length) {
     addTodos(todoValue.value);
-    template(myArr[0]);
     todoValue.value = '';
   } else {
     todoValue.value = '';
@@ -64,7 +23,6 @@ todoValue.addEventListener('keyup', event => {
   if (event.keyCode === 13 && todoValue.value.length) {
     if (todoValue.value.trim().length) {
       addTodos(todoValue.value);
-      template(myArr[0]);
       todoValue.value = '';
     } else {
       todoValue.value = '';
@@ -74,20 +32,18 @@ todoValue.addEventListener('keyup', event => {
 
 // Remove Todo
 const removeTodoFun = () => {
-  removeTodo = document.querySelectorAll('.remove');
-  removeTodo.forEach(element => {
+  removeTodoBtn = document.querySelectorAll('.remove');
+  removeTodoBtn.forEach(element => {
     element.addEventListener('click', () => removeTodoFunLogic(event));
   });
 };
 
 const removeTodoFunLogic = event => {
-  axios.delete(
-    `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
-  );
-
-  setTimeout(() => {
-    getTodos();
-  }, 300);
+  axios
+    .delete(
+      `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
+    )
+    .then(getTodos);
 };
 
 //Complete Todo
@@ -102,12 +58,11 @@ const completeTodoBack = event => {
   let id = event.target.parentNode.id;
   let newValue = event.target.checked;
   event.target.parentNode.children[1].classList.remove('done');
-  axios.patch(`http://localhost:3000/list/${id}`, {
-    newValue
-  });
-  setTimeout(() => {
-    getTodos();
-  }, 100);
+  axios
+    .patch(`http://localhost:3000/list/${id}`, {
+      newValue
+    })
+    .then(getTodos);
 };
 
 //Delete All Complete Todos
@@ -116,59 +71,57 @@ const deleteAllComplete = () => {
 };
 
 const deleteAllCompleteLogic = () => {
-  myArr[0].map(element => {
-    if (element.isCompleted) {
-      axios.delete(`http://localhost:3000/list/${element._id}`);
-    }
-  });
-  setTimeout(() => {
-    getTodos();
-  }, 200);
+  myArr[0]
+    .map(element => {
+      if (element.isCompleted) {
+        axios.delete(`http://localhost:3000/list/${element._id}`);
+      }
+    })
+    .then(getTodos);
 };
 
 //template
-const template = arr => {
+const template = () => {
   main.innerHTML = '';
+  let arr = myArr[0];
 
-  setTimeout(() => {
-    arr.map(element => {
-      let div = document.createElement('div');
-      div.className = 'todo-item';
-      div.id = element._id.toString();
-      //creating p element
-      let p = document.createElement('p');
-      p.innerHTML = element.value;
-      p.className = 'text';
-      //creating checkbox
-      let checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.className = 'check';
-      checkbox.checked = element.isCompleted;
-      if (checkbox.checked) {
-        p.classList.add('done');
-      }
-      // creating image
-      let imagediv = document.createElement('div');
-      let remove = document.createElement('img');
-      let edit = document.createElement('img');
-      imagediv.className = 'images';
-      remove.src = './img/remove.png';
-      remove.className = 'remove';
-      edit.src = './img/edit-icon.png';
-      edit.className = 'edit';
-      imagediv.append(edit);
-      imagediv.append(remove);
-      //appending into div
-      div.append(checkbox);
-      div.append(p);
-      div.append(imagediv);
-      //adding to main
-      main.append(div);
-    });
-    removeTodoFun();
-    completeTodoFunc();
-    deleteAllComplete();
-  }, 700);
+  arr.map(element => {
+    let div = document.createElement('div');
+    div.className = 'todo-item';
+    div.id = element._id.toString();
+    //creating p element
+    let p = document.createElement('p');
+    p.innerHTML = element.value;
+    p.className = 'text';
+    //creating checkbox
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'check';
+    checkbox.checked = element.isCompleted;
+    if (checkbox.checked) {
+      p.classList.add('done');
+    }
+    // creating image
+    let imagediv = document.createElement('div');
+    let remove = document.createElement('img');
+    let edit = document.createElement('img');
+    imagediv.className = 'images';
+    remove.src = './img/remove.png';
+    remove.className = 'remove';
+    edit.src = './img/edit-icon.png';
+    edit.className = 'edit';
+    imagediv.append(edit);
+    imagediv.append(remove);
+    //appending into div
+    div.append(checkbox);
+    div.append(p);
+    div.append(imagediv);
+    //adding to main
+    main.append(div);
+  });
+  removeTodoFun();
+  completeTodoFunc();
+  deleteAllComplete();
 };
 
 loadFirstTime();
