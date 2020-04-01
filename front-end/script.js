@@ -15,8 +15,12 @@ const getTodos = () => {
     .get('http://localhost:3000/list')
     .then(response => myArr.push(response.data));
   setTimeout(() => {
-    template(myArr[0]);
-  }, 170);
+    if (myArr[0].length) {
+      template(myArr[0]);
+    } else {
+      main.innerHTML = '<h1>Nothing to do...</h1>';
+    }
+  }, 200);
 };
 
 const addTodos = todovalue => {
@@ -74,10 +78,19 @@ const removeTodoFunLogic = event => {
 const completeTodoFunc = () => {
   checkedTodo = document.querySelectorAll('.check');
   checkedTodo.forEach(element => {
-    element.addEventListener('change', () => {
-      console.log('clicked');
-    });
+    element.addEventListener('change', () => completeTodoBack(event));
   });
+};
+
+const completeTodoBack = event => {
+  let id = event.target.parentNode.id;
+  let newValue = event.target.checked;
+  axios.patch(`http://localhost:3000/list/${id}`, {
+    newValue
+  });
+  setTimeout(() => {
+    getTodos();
+  }, 50);
 };
 
 //template

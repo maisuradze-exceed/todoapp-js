@@ -39,15 +39,18 @@ router.post('/', async (req, res) => {
 });
 
 //Update Single item
-router.put('/:id', async (req, res) => {
-  const { value, isCompleted } = req.body;
+router.patch('/:id', async (req, res) => {
+  const { newValue } = req.body;
+
   try {
-    const editedItem = await Item.updateOne(req.body.id, {
-      $set: {
-        value,
-        isCompleted: isCompleted || false
+    const editedItem = await Item.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          isCompleted: newValue
+        }
       }
-    });
+    );
     res.send(editedItem);
   } catch (err) {
     res.send({ msg: err });
