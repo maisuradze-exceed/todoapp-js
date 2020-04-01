@@ -1,5 +1,5 @@
 const main = document.querySelector('.todo-list');
-const delete1 = document.querySelector('.delete-complete-btn');
+const deleteCompleted = document.querySelector('.delete-complete-btn');
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
 let checkedTodo = document.querySelectorAll('.check');
@@ -8,6 +8,22 @@ let removeTodo = document.querySelectorAll('.remove');
 const rows = 10;
 let current_page = 1;
 let myArr = [];
+
+const loadFirstTime = () => {
+  main.innerHTML = 'Loading...';
+
+  axios
+    .get('http://localhost:3000/list')
+    .then(response => myArr.push(response.data));
+
+  setTimeout(() => {
+    if (myArr[0].length) {
+      template(myArr[0]);
+    } else {
+      main.innerHTML = '<h1>Nothing to do...</h1>';
+    }
+  }, 600);
+};
 
 const getTodos = () => {
   myArr = [];
@@ -20,7 +36,7 @@ const getTodos = () => {
     } else {
       main.innerHTML = '<h1>Nothing to do...</h1>';
     }
-  }, 200);
+  }, 300);
 };
 
 const addTodos = todovalue => {
@@ -85,12 +101,29 @@ const completeTodoFunc = () => {
 const completeTodoBack = event => {
   let id = event.target.parentNode.id;
   let newValue = event.target.checked;
+  event.target.parentNode.children[1].classList.remove('done');
   axios.patch(`http://localhost:3000/list/${id}`, {
     newValue
   });
   setTimeout(() => {
     getTodos();
-  }, 50);
+  }, 100);
+};
+
+//Delete All Complete Todos
+const deleteAllComplete = () => {
+  deleteCompleted.addEventListener('click', deleteAllCompleteLogic);
+};
+
+const deleteAllCompleteLogic = () => {
+  myArr[0].map(element => {
+    if (element.isCompleted) {
+      axios.delete(`http://localhost:3000/list/${element._id}`);
+    }
+  });
+  setTimeout(() => {
+    getTodos();
+  }, 200);
 };
 
 //template
@@ -134,7 +167,8 @@ const template = arr => {
     });
     removeTodoFun();
     completeTodoFunc();
+    deleteAllComplete();
   }, 700);
 };
 
-getTodos();
+loadFirstTime();
