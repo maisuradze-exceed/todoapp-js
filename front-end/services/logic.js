@@ -38,6 +38,42 @@ const delcompfun = () => {
   });
 };
 
+const editfunc = () => {
+  let data = event.target.parentNode.parentNode.children[1].innerHTML;
+  let save = document.createElement('button');
+  save.className = 'save-button';
+  save.innerHTML = 'Save';
+  let input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'edit-text';
+  input.maxLength = 45;
+  input.value = data;
+  let div = document.createElement('div');
+  div.className = 'text-save';
+  event.target.parentNode.className = 'hidden';
+  event.target.parentNode.parentNode.children[0].className = 'hidden';
+  event.target.parentNode.parentNode.children[0].checked = false;
+  event.target.parentNode.parentNode.children[1].className = 'hidden';
+  div.append(input);
+  div.append(save);
+  event.target.parentNode.parentNode.append(div);
+  save.addEventListener('click', event => {
+    let text = event.target.parentNode.parentNode.children[3].children[0].value;
+    let check = event.target.parentNode.parentNode.children[0].checked;
+    if (data.trim()) {
+      axios
+        .patch(
+          `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`,
+          {
+            text,
+            check
+          }
+        )
+        .then(getTodos);
+    }
+  });
+};
+
 const create = (pagItem, wrapper) => {
   for (let i = 0; i < pagItem.length; i++) {
     let element = pagItem[i];
