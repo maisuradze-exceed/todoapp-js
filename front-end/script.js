@@ -3,10 +3,7 @@ const deleteCompleted = document.querySelector('.delete-complete-btn');
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
 let checkedTodo = document.querySelectorAll('.check');
-let paginationNum = document.querySelector('.pagination');
 let removeTodoBtn = document.querySelectorAll('.remove');
-const rows = 10;
-let current_page = 1;
 let myArr = [];
 
 // Add New Todo
@@ -19,65 +16,25 @@ addButton.addEventListener('click', () => {
   }
 });
 
-todoValue.addEventListener('keyup', event => {
-  if (event.keyCode === 13 && todoValue.value.length) {
-    if (todoValue.value.trim().length) {
-      addTodos(todoValue.value);
-      todoValue.value = '';
-    } else {
-      todoValue.value = '';
-    }
-  }
-});
-
 // Remove Todo
-const removeTodoFun = () => {
+const remove = () => {
   removeTodoBtn = document.querySelectorAll('.remove');
   removeTodoBtn.forEach(element => {
-    element.addEventListener('click', () => removeTodoFunLogic(event));
+    element.addEventListener('click', () => removefunc(event));
   });
-};
-
-const removeTodoFunLogic = event => {
-  axios
-    .delete(
-      `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
-    )
-    .then(getTodos);
 };
 
 //Complete Todo
-const completeTodoFunc = () => {
+const complete = () => {
   checkedTodo = document.querySelectorAll('.check');
   checkedTodo.forEach(element => {
-    element.addEventListener('change', () => completeTodoBack(event));
+    element.addEventListener('change', () => completefunc(event));
   });
 };
 
-const completeTodoBack = event => {
-  let id = event.target.parentNode.id;
-  let newValue = event.target.checked;
-  event.target.parentNode.children[1].classList.remove('done');
-  axios
-    .patch(`http://localhost:3000/list/${id}`, {
-      newValue
-    })
-    .then(getTodos);
-};
-
 //Delete All Complete Todos
-const deleteAllComplete = () => {
-  deleteCompleted.addEventListener('click', deleteAllCompleteLogic);
-};
-
-const deleteAllCompleteLogic = () => {
-  myArr[0]
-    .map(element => {
-      if (element.isCompleted) {
-        axios.delete(`http://localhost:3000/list/${element._id}`);
-      }
-    })
-    .then(getTodos);
+const delcomplete = () => {
+  deleteCompleted.addEventListener('click', delcompfun);
 };
 
 //template
@@ -119,9 +76,9 @@ const template = () => {
     //adding to main
     main.append(div);
   });
-  removeTodoFun();
-  completeTodoFunc();
-  deleteAllComplete();
+  remove();
+  complete();
+  delcomplete();
 };
 
 loadFirstTime();

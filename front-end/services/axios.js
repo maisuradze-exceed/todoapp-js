@@ -1,7 +1,7 @@
 const getTodos = () => {
   myArr = [];
   axios
-    .get('http://localhost:3000/list')
+    .get('http://localhost:3000/list/')
     .then(response => myArr.push(response.data))
     .then(template);
 };
