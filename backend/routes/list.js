@@ -19,8 +19,9 @@ router.get('/lists', paginatedResults(Item), (req, res) => {
 
 function paginatedResults(model) {
   return async (req, res, next) => {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const { pagereq, limitreq } = req.query;
+    const page = +pagereq;
+    const limit = +limitreq;
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -72,18 +73,18 @@ router.post('/', async (req, res) => {
 
 //Update Single item
 router.patch('/:id', async (req, res) => {
-  const { newValue } = req.body;
-
   try {
     const editedItem = await Item.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $set: {
-          isCompleted: newValue
+          value: req.body.text,
+          isCompleted: req.body.check
         }
       }
     );
-    res.send(editedItem);
+    const items = await Item.find();
+    res.json(items);
   } catch (err) {
     res.send({ msg: err });
   }
