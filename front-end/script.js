@@ -3,6 +3,7 @@ const deleteCompleted = document.querySelector('.delete-complete-btn');
 const allCompleteBtn = document.querySelector('.allcomplete-btn');
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
+const allBtn = document.querySelectorAll('.btn-div');
 const pagBtn = document.querySelector('.pagination');
 let checkedTodo = document.querySelectorAll('.check');
 let removeTodoBtn = document.querySelectorAll('.remove');
@@ -11,8 +12,17 @@ let current_page = 1;
 // Add New Todo
 addButton.addEventListener('click', () => {
   if (todoValue.value.length && todoValue.value.trim().length) {
-    addTodos(todoValue.value);
-    todoValue.value = '';
+    if (main.childElementCount === 10) {
+      addTodos(todoValue.value);
+      setTimeout(() => {
+        let btn = document.querySelector('.pagination').childElementCount;
+        document.querySelector('.pagination').childNodes[btn - 1].click();
+      }, 50);
+      todoValue.value = '';
+    } else {
+      addTodos(todoValue.value);
+      todoValue.value = '';
+    }
   } else {
     todoValue.value = '';
   }
@@ -37,10 +47,21 @@ const complete = () => {
 //Delete All Complete Todos
 const delcomplete = () => {
   deleteCompleted.addEventListener('click', delcompfun);
+  empty();
 };
 
 //Complete All
 // const allComplete = () => {};
+
+//Check If Empty
+const empty = () => {
+  if (!myArr[0].length) {
+    main.innerHTML = '<h1>Nothing To Do</h1>';
+    allBtn.forEach(element => element.classList.add('hidden'));
+  } else {
+    allBtn.forEach(element => element.classList.remove('hidden'));
+  }
+};
 
 // Edit Todo
 const edit = () => {
@@ -54,6 +75,7 @@ const edit = () => {
 const template = () => {
   main.innerHTML = '';
   let arr = myArr[0];
+  empty();
   displayList(arr, main, 10, current_page);
   pagButton(arr, pagBtn, 10);
 };

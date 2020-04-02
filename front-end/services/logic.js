@@ -12,18 +12,38 @@ const completefunc = event => {
 };
 
 const removefunc = event => {
-  axios
-    .delete(
-      `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
-    )
-    .then(getTodos);
+  let main = document.querySelector('.todo-list');
+  if (main.children.length === 1) {
+    axios
+      .delete(
+        `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
+      )
+      .then(() => {
+        location.reload();
+      });
+  } else {
+    axios
+      .delete(
+        `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
+      )
+      .then(getTodos);
+  }
 };
 
 todoValue.addEventListener('keyup', event => {
   if (event.keyCode === 13 && todoValue.value.length) {
     if (todoValue.value.trim().length) {
-      addTodos(todoValue.value);
-      todoValue.value = '';
+      if (main.childElementCount === 10) {
+        addTodos(todoValue.value);
+        setTimeout(() => {
+          let btn = document.querySelector('.pagination').childElementCount;
+          document.querySelector('.pagination').childNodes[btn - 1].click();
+        }, 200);
+        todoValue.value = '';
+      } else {
+        addTodos(todoValue.value);
+        todoValue.value = '';
+      }
     } else {
       todoValue.value = '';
     }
@@ -33,7 +53,9 @@ todoValue.addEventListener('keyup', event => {
 const delcompfun = () => {
   myArr[0].map(element => {
     if (element.isCompleted) {
-      axios.delete(`http://localhost:3000/list/${element._id}`).then(getTodos);
+      axios.delete(`http://localhost:3000/list/${element._id}`).then(() => {
+        location.reload();
+      });
     }
   });
 };
