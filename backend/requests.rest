@@ -1,1 +1,1 @@
-GET http://localhost:3000/list/lists?page=1&limit=10
+GET http://localhost:3000/list/lists?limit=10

@@ -2,9 +2,10 @@ const main = document.querySelector('.todo-list');
 const deleteCompleted = document.querySelector('.delete-complete-btn');
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
+const pagBtn = document.querySelector('.pagination');
 let checkedTodo = document.querySelectorAll('.check');
 let removeTodoBtn = document.querySelectorAll('.remove');
-let myArr = [];
+let current_page = 1;
 
 // Add New Todo
 addButton.addEventListener('click', () => {
@@ -41,8 +42,24 @@ const delcomplete = () => {
 const template = () => {
   main.innerHTML = '';
   let arr = myArr[0];
+  displayList(arr, main, 10, current_page);
+  pagButton(arr, pagBtn, 10);
+  remove();
+  complete();
+  delcomplete();
+};
 
-  arr.map(element => {
+loadFirstTime();
+
+function displayList(items, wrapper, rows, page) {
+  wrapper.innerHTML = '';
+  page--;
+  let start = rows * page;
+  let end = start + rows;
+  let pagItem = items.slice(start, end);
+  console.log(pagItem);
+  for (let i = 0; i < pagItem.length; i++) {
+    let element = pagItem[i];
     let div = document.createElement('div');
     div.className = 'todo-item';
     div.id = element._id.toString();
@@ -74,11 +91,37 @@ const template = () => {
     div.append(p);
     div.append(imagediv);
     //adding to main
-    main.append(div);
-  });
-  remove();
-  complete();
-  delcomplete();
-};
+    wrapper.append(div);
+  }
+}
 
-loadFirstTime();
+function pagButton(items, wrapper, rows) {
+  wrapper.innerHTML = '';
+  let page_count = Math.ceil(items.length / rows);
+  console.log(page_count);
+  for (let i = 1; i < page_count + 1; i++) {
+    let btn = paginationBtn(i, items);
+    console.log(btn);
+    wrapper.appendChild(btn);
+  }
+}
+
+function paginationBtn(page, items) {
+  let button = document.createElement('button');
+  button.innerText = page;
+
+  if (current_page === page) {
+    button.classList.add('active');
+  }
+
+  button.addEventListener('click', () => {
+    current_page = page;
+    displayList(items, main, 10, current_page);
+
+    let current_btn = document.querySelector('.active');
+    current_btn.classList.remove('active');
+    button.classList.add('active');
+  });
+
+  return button;
+}

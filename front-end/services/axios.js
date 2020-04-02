@@ -1,7 +1,11 @@
+const list_element = document.querySelector('.todo-list');
+const pagination = document.querySelector('.pagination');
+let myArr = [];
+
 const getTodos = () => {
   myArr = [];
   axios
-    .get('http://localhost:3000/list/')
+    .get('http://localhost:3000/list')
     .then(response => myArr.push(response.data))
     .then(template);
 };
@@ -11,10 +15,7 @@ const addTodos = todovalue => {
     .post('http://localhost:3000/list', {
       value: todovalue
     })
-    .then(response => {
-      myArr[0].push(response.data);
-    })
-    .then(template);
+    .then(getTodos);
 };
 
 const loadFirstTime = () => {
