@@ -1,13 +1,14 @@
-const main = document.querySelector('.todo-list');
 const deleteCompleted = document.querySelector('.delete-complete-btn');
-const allCompleteBtn = document.querySelector('.allcomplete-btn');
 const addButton = document.querySelector('.addtodo-btn');
 const todoValue = document.querySelector('.todo-value');
 const allBtn = document.querySelectorAll('.btn-div');
 const pagBtn = document.querySelector('.pagination');
+const main = document.querySelector('.todo-list');
+let item = document.querySelectorAll('.todo-item');
 let checkedTodo = document.querySelectorAll('.check');
 let removeTodoBtn = document.querySelectorAll('.remove');
 let current_page = 1;
+let allCompleteBtn = document.querySelector('.allcomplete-btn');
 
 // Add New Todo
 addButton.addEventListener('click', () => {
@@ -17,7 +18,7 @@ addButton.addEventListener('click', () => {
       setTimeout(() => {
         let btn = document.querySelector('.pagination').childElementCount;
         document.querySelector('.pagination').childNodes[btn - 1].click();
-      }, 50);
+      }, 200);
       todoValue.value = '';
     } else {
       addTodos(todoValue.value);
@@ -31,7 +32,7 @@ addButton.addEventListener('click', () => {
 // Remove Todo
 const remove = () => {
   removeTodoBtn = document.querySelectorAll('.remove');
-  removeTodoBtn.forEach(element => {
+  removeTodoBtn.forEach((element) => {
     element.addEventListener('click', () => removefunc(event));
   });
 };
@@ -39,7 +40,7 @@ const remove = () => {
 //Complete Todo
 const complete = () => {
   checkedTodo = document.querySelectorAll('.check');
-  checkedTodo.forEach(element => {
+  checkedTodo.forEach((element) => {
     element.addEventListener('change', () => completefunc(event));
   });
 };
@@ -51,22 +52,87 @@ const delcomplete = () => {
 };
 
 //Complete All
-// const allComplete = () => {};
+const allComplete = () => {
+  allCompleteBtn.addEventListener('click', () => {
+    let checker = () => myArr[0].every((v) => v.isCompleted);
+    if (!checker()) {
+      myArr[0].map((element) => {
+        axios
+          .patch(`http://localhost:3000/list/${element._id}`, {
+            text: element.value,
+            check: true,
+          })
+          .then(
+            setTimeout(() => {
+              location.reload();
+            }, 300)
+          );
+      });
+    } else {
+      myArr[0].map((element) => {
+        axios
+          .patch(`http://localhost:3000/list/${element._id}`, {
+            text: element.value,
+            check: false,
+          })
+          .then(
+            setTimeout(() => {
+              location.reload();
+            }, 300)
+          );
+      });
+    }
+  });
+};
+
+// if (!checker()) {
+//   arr.map((element) => {
+//     axios
+//       .patch(`http://localhost:3000/list/${element.id}`, {
+//         text: element.children[1].innerHTML,
+//         check: true,
+//       })
+//       .then(() => {
+//         location.reload();
+//       });
+//   });
+// } else {
+//   arr.map((element) => {
+//     axios
+//       .patch(`http://localhost:3000/list/${element.id}`, {
+//         text: element.children[1].innerHTML,
+//         check: false,
+//       })
+//       .then(() => {
+//         location.reload();
+//       });
+//   });
+// }
+
+//Check if All Complete
+const check = () => {
+  let checker = () => myArr[0].every((v) => v.isCompleted === true);
+  if (!checker()) {
+    allCompleteBtn.innerHTML = 'Complete All';
+  } else {
+    allCompleteBtn.innerHTML = 'Uncomplete All';
+  }
+};
 
 //Check If Empty
 const empty = () => {
   if (!myArr[0].length) {
     main.innerHTML = '<h1>Nothing To Do</h1>';
-    allBtn.forEach(element => element.classList.add('hidden'));
+    allBtn.forEach((element) => element.classList.add('hidden'));
   } else {
-    allBtn.forEach(element => element.classList.remove('hidden'));
+    allBtn.forEach((element) => element.classList.remove('hidden'));
   }
 };
 
 // Edit Todo
 const edit = () => {
   let item = document.querySelectorAll('.todo-item');
-  item.forEach(todo => {
+  item.forEach((todo) => {
     todo.children[2].children[0].addEventListener('click', editfunc);
   });
 };
@@ -88,10 +154,12 @@ function displayList(items, wrapper, rows, page) {
   let pagItem = items.slice(start, end);
   create(pagItem, wrapper);
 
+  allComplete();
   remove();
   complete();
   delcomplete();
   edit();
+  check();
 }
 
 function pagButton(items, wrapper, rows) {

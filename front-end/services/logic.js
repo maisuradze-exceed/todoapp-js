@@ -1,4 +1,4 @@
-const completefunc = event => {
+const completefunc = (event) => {
   let id = event.target.parentNode.id;
   let check = event.target.checked;
   let text = event.target.parentNode.children[1].innerText;
@@ -6,21 +6,23 @@ const completefunc = event => {
   axios
     .patch(`http://localhost:3000/list/${id}`, {
       text,
-      check
+      check,
     })
     .then(getTodos);
 };
 
-const removefunc = event => {
+const removefunc = (event) => {
   let main = document.querySelector('.todo-list');
   if (main.children.length === 1) {
     axios
       .delete(
         `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
       )
-      .then(() => {
-        location.reload();
-      });
+      .then(
+        setTimeout(() => {
+          location.reload();
+        }, 300)
+      );
   } else {
     axios
       .delete(
@@ -30,7 +32,7 @@ const removefunc = event => {
   }
 };
 
-todoValue.addEventListener('keyup', event => {
+todoValue.addEventListener('keyup', (event) => {
   if (event.keyCode === 13 && todoValue.value.length) {
     if (todoValue.value.trim().length) {
       if (main.childElementCount === 10) {
@@ -38,7 +40,7 @@ todoValue.addEventListener('keyup', event => {
         setTimeout(() => {
           let btn = document.querySelector('.pagination').childElementCount;
           document.querySelector('.pagination').childNodes[btn - 1].click();
-        }, 200);
+        }, 100);
         todoValue.value = '';
       } else {
         addTodos(todoValue.value);
@@ -51,7 +53,7 @@ todoValue.addEventListener('keyup', event => {
 });
 
 const delcompfun = () => {
-  myArr[0].map(element => {
+  myArr[0].map((element) => {
     if (element.isCompleted) {
       axios.delete(`http://localhost:3000/list/${element._id}`).then(() => {
         location.reload();
@@ -79,21 +81,7 @@ const editfunc = () => {
   div.append(input);
   div.append(save);
   event.target.parentNode.parentNode.append(div);
-  save.addEventListener('click', event => {
-    let text = event.target.parentNode.parentNode.children[3].children[0].value;
-    let check = event.target.parentNode.parentNode.children[0].checked;
-    if (data.trim()) {
-      axios
-        .patch(
-          `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`,
-          {
-            text,
-            check
-          }
-        )
-        .then(getTodos);
-    }
-  });
+  save.addEventListener('click', edfunc);
 };
 
 const create = (pagItem, wrapper) => {
