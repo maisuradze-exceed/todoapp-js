@@ -37,10 +37,8 @@ todoValue.addEventListener('keyup', (event) => {
     if (todoValue.value.trim().length) {
       if (main.childElementCount === 10) {
         addTodos(todoValue.value);
-        setTimeout(() => {
-          let btn = document.querySelector('.pagination').childElementCount;
-          document.querySelector('.pagination').childNodes[btn - 1].click();
-        }, 100);
+        let btn = document.querySelector('.pagination').childElementCount;
+        document.querySelector('.pagination').childNodes[btn - 1].click();
         todoValue.value = '';
       } else {
         addTodos(todoValue.value);
@@ -53,11 +51,14 @@ todoValue.addEventListener('keyup', (event) => {
 });
 
 const delcompfun = () => {
+  console.log(myArr[0]);
   myArr[0].map((element) => {
     if (element.isCompleted) {
-      axios.delete(`http://localhost:3000/list/${element._id}`).then(() => {
-        location.reload();
-      });
+      axios.delete(`http://localhost:3000/list/${element._id}`).then(
+        setTimeout(() => {
+          location.reload();
+        }, 300)
+      );
     }
   });
 };

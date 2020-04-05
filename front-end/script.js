@@ -15,10 +15,8 @@ addButton.addEventListener('click', () => {
   if (todoValue.value.length && todoValue.value.trim().length) {
     if (main.childElementCount === 10) {
       addTodos(todoValue.value);
-      setTimeout(() => {
-        let btn = document.querySelector('.pagination').childElementCount;
-        document.querySelector('.pagination').childNodes[btn - 1].click();
-      }, 200);
+      let btn = document.querySelector('.pagination').childElementCount;
+      document.querySelector('.pagination').childNodes[btn - 1].click();
       todoValue.value = '';
     } else {
       addTodos(todoValue.value);
@@ -54,64 +52,48 @@ const delcomplete = () => {
 //Complete All
 const allComplete = () => {
   allCompleteBtn.addEventListener('click', () => {
-    let checker = () => myArr[0].every((v) => v.isCompleted);
+    item = document.querySelectorAll('.todo-item');
+    let arr = [];
+    item.forEach((element) => {
+      arr.push(element);
+    });
+    let checker = () =>
+      arr.every((element) => element.children[0].checked === true);
     if (!checker()) {
-      myArr[0].map((element) => {
+      arr.map((element) => {
         axios
-          .patch(`http://localhost:3000/list/${element._id}`, {
-            text: element.value,
+          .patch(`http://localhost:3000/list/${element.id}`, {
+            text: element.children[1].innerHTML,
             check: true,
           })
-          .then(
-            setTimeout(() => {
-              location.reload();
-            }, 300)
-          );
+          .then(() => {
+            location.reload();
+          });
       });
     } else {
-      myArr[0].map((element) => {
+      arr.map((element) => {
         axios
-          .patch(`http://localhost:3000/list/${element._id}`, {
-            text: element.value,
+          .patch(`http://localhost:3000/list/${element.id}`, {
+            text: element.children[1].innerHTML,
             check: false,
           })
-          .then(
-            setTimeout(() => {
-              location.reload();
-            }, 300)
-          );
+          .then(() => {
+            location.reload();
+          });
       });
     }
   });
 };
 
-// if (!checker()) {
-//   arr.map((element) => {
-//     axios
-//       .patch(`http://localhost:3000/list/${element.id}`, {
-//         text: element.children[1].innerHTML,
-//         check: true,
-//       })
-//       .then(() => {
-//         location.reload();
-//       });
-//   });
-// } else {
-//   arr.map((element) => {
-//     axios
-//       .patch(`http://localhost:3000/list/${element.id}`, {
-//         text: element.children[1].innerHTML,
-//         check: false,
-//       })
-//       .then(() => {
-//         location.reload();
-//       });
-//   });
-// }
-
 //Check if All Complete
 const check = () => {
-  let checker = () => myArr[0].every((v) => v.isCompleted === true);
+  item = document.querySelectorAll('.todo-item');
+  let arr = [];
+  item.forEach((element) => {
+    arr.push(element);
+  });
+  let checker = () =>
+    arr.every((element) => element.children[0].checked === true);
   if (!checker()) {
     allCompleteBtn.innerHTML = 'Complete All';
   } else {
@@ -154,11 +136,10 @@ function displayList(items, wrapper, rows, page) {
   let pagItem = items.slice(start, end);
   create(pagItem, wrapper);
 
-  allComplete();
   remove();
+  edit();
   complete();
   delcomplete();
-  edit();
   check();
 }
 
@@ -192,3 +173,5 @@ function paginationBtn(page, items) {
 
   return button;
 }
+
+allComplete();
