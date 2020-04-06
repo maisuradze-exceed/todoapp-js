@@ -116,16 +116,16 @@ const edit = () => {
 };
 
 //template
-const template = (array) => {
+const template = () => {
+  let arr = myArr[0];
   main.innerHTML = '';
-  let arr = myArr[0] || array;
-  empty();
   displayList(arr, main, 10, current_page);
   pagButton(arr, pagBtn, 10);
   remove();
   edit();
   complete();
   delcomplete();
+  empty();
   check();
 };
 
@@ -158,6 +158,7 @@ function paginationBtn(page, items) {
   button.addEventListener('click', () => {
     current_page = page;
     displayList(items, main, 10, current_page);
+    check();
 
     let current_btn = document.querySelector('.active');
     if (current_btn) {

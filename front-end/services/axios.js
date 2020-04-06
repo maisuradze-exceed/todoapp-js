@@ -11,11 +11,13 @@ const getTodos = () => {
 };
 
 const addTodos = (todovalue) => {
+  myArr = [];
   axios
     .post('http://localhost:3000/list', {
       value: todovalue,
     })
-    .then(getTodos);
+    .then((res) => myArr.push(res.data))
+    .then(template);
 };
 
 const loadFirstTime = () => {
