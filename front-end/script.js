@@ -53,31 +53,33 @@ const delcomplete = () => {
 const allComplete = () => {
   allCompleteBtn.addEventListener('click', () => {
     item = document.querySelectorAll('.todo-item');
-    let arr = [...item];
+    let arr = [];
+    item.forEach((element) => {
+      arr.push(element.id);
+    });
+    let check = [...item];
     let checker = () =>
-      arr.every((element) => element.children[0].checked === true);
+      check.every((element) => element.children[0].checked === true);
     if (!checker()) {
-      arr.map((element) => {
-        axios
-          .patch(`http://localhost:3000/list/${element.id}`, {
-            text: element.children[1].innerHTML,
-            check: true,
-          })
-          .then(() => {
+      axios
+        .patch(`http://localhost:3000/list/multiple/${arr}`, {
+          check: true,
+        })
+        .then(
+          setTimeout(() => {
             location.reload();
-          });
-      });
+          }, 200)
+        );
     } else {
-      arr.map((element) => {
-        axios
-          .patch(`http://localhost:3000/list/${element.id}`, {
-            text: element.children[1].innerHTML,
-            check: false,
-          })
-          .then(() => {
+      axios
+        .patch(`http://localhost:3000/list/multiple/${arr}`, {
+          check: false,
+        })
+        .then(
+          setTimeout(() => {
             location.reload();
-          });
-      });
+          }, 200)
+        );
     }
   });
 };
@@ -114,12 +116,17 @@ const edit = () => {
 };
 
 //template
-const template = () => {
+const template = (array) => {
   main.innerHTML = '';
-  let arr = myArr[0];
+  let arr = myArr[0] || array;
   empty();
   displayList(arr, main, 10, current_page);
   pagButton(arr, pagBtn, 10);
+  remove();
+  edit();
+  complete();
+  delcomplete();
+  check();
 };
 
 function displayList(items, wrapper, rows, page) {
@@ -129,12 +136,6 @@ function displayList(items, wrapper, rows, page) {
   let end = start + rows;
   let pagItem = items.slice(start, end);
   create(pagItem, wrapper);
-
-  remove();
-  edit();
-  complete();
-  delcomplete();
-  check();
 }
 
 function pagButton(items, wrapper, rows) {

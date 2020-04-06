@@ -58,9 +58,9 @@ const delcompfun = () => {
     }
   });
 
-  axios
-    .delete(`http://localhost:3000/list/multiple/${arr}`)
-    .then((res) => console.log(res));
+  axios.delete(`http://localhost:3000/list/multiple/${arr}`).then(() => {
+    location.reload();
+  });
 };
 
 const editfunc = () => {

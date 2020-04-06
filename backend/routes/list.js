@@ -61,7 +61,8 @@ router.post('/', async (req, res) => {
   });
   try {
     const items = await item.save();
-    res.send(items);
+    const allitems = await Item.find();
+    res.send(allitems);
   } catch (err) {
     res.json({ msg: err });
   }
@@ -70,11 +71,8 @@ router.post('/', async (req, res) => {
 //Update Single item
 router.patch('/:id', async (req, res) => {
   try {
-    let arr = [];
-    arr.push(req.params.id);
-    console.log(arr);
     const editedItem = await Item.findByIdAndUpdate(
-      { _id: arr.map((element) => element) },
+      { _id: req.params.id },
       {
         $set: {
           value: req.body.text,
@@ -83,7 +81,24 @@ router.patch('/:id', async (req, res) => {
       }
     );
     const items = await Item.find();
-    res.json(items);
+    res.send(items);
+  } catch (err) {
+    res.send({ msg: err });
+  }
+});
+
+//Update multiple items
+router.patch('/multiple/:id', async (req, res) => {
+  try {
+    const arr = await req.params.id.split(',');
+    const myquery = { _id: { $in: arr } };
+    const items = await Item.updateMany(myquery, {
+      $set: {
+        isCompleted: req.body.check,
+      },
+    });
+    console.log(items);
+    // res.json(items);
   } catch (err) {
     res.send({ msg: err });
   }
@@ -103,10 +118,8 @@ router.delete('/:id', async (req, res) => {
 router.delete('/multiple/:id', async (req, res) => {
   try {
     const arr = await req.params.id.split(',');
-    const removedItem = await arr.map((element) => {
-      console.log(element);
-      Item.findByIdAndRemove(element);
-    });
+    const myquery = { _id: { $in: arr } };
+    const removedItem = await Item.deleteMany(myquery);
     res.send(removedItem);
   } catch (err) {
     res.send({ msg: err });
