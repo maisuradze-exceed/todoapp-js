@@ -53,10 +53,7 @@ const delcomplete = () => {
 const allComplete = () => {
   allCompleteBtn.addEventListener('click', () => {
     item = document.querySelectorAll('.todo-item');
-    let arr = [];
-    item.forEach((element) => {
-      arr.push(element);
-    });
+    let arr = [...item];
     let checker = () =>
       arr.every((element) => element.children[0].checked === true);
     if (!checker()) {
@@ -88,10 +85,7 @@ const allComplete = () => {
 //Check if All Complete
 const check = () => {
   item = document.querySelectorAll('.todo-item');
-  let arr = [];
-  item.forEach((element) => {
-    arr.push(element);
-  });
+  let arr = [...item];
   let checker = () =>
     arr.every((element) => element.children[0].checked === true);
   if (!checker()) {
