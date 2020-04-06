@@ -93,16 +93,15 @@ const create = (pagItem, wrapper) => {
     div.id = element._id.toString();
     //creating p element
     let p = document.createElement('p');
-    p.innerHTML = element.value;
+    p.innerText = element.value.toString();
     p.className = 'text';
+    // p.classList.add('done');
     //creating checkbox
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'check';
     checkbox.checked = element.isCompleted;
-    if (checkbox.checked) {
-      p.classList.add('done');
-    }
+    checkbox.checked ? p.classList.add('done') : null;
     // creating image
     let imagediv = document.createElement('div');
     let remove = document.createElement('img');
