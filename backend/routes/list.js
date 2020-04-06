@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
 //Update Single item
 router.patch('/:id', async (req, res) => {
   try {
+    console.log(req.body.text);
     const editedItem = await Item.findByIdAndUpdate(
       { _id: req.params.id },
       {
@@ -80,8 +81,8 @@ router.patch('/:id', async (req, res) => {
         },
       }
     );
-    const items = await Item.find();
-    res.send(items);
+    const data = await Item.find();
+    res.send(data);
   } catch (err) {
     res.send({ msg: err });
   }
@@ -97,7 +98,7 @@ router.patch('/multiple/:id', async (req, res) => {
         isCompleted: req.body.check,
       },
     });
-    console.log(items);
+    res.send(Item.find());
     // res.json(items);
   } catch (err) {
     res.send({ msg: err });

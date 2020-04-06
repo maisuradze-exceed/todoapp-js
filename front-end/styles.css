@@ -262,9 +262,16 @@ input[type='checkbox']:focus {
 }
 
 .text-save {
-  margin: auto;
+  margin-right: 80px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
+}
+
+@media only screen and (min-width: 1573px) {
+  .text-save {
+    margin-right: 150px;
+  }
 }
 
 @media only screen and (max-width: 1573px) {
@@ -272,6 +279,7 @@ input[type='checkbox']:focus {
     font-size: 15px;
   }
 }
+
 @media only screen and (max-width: 1309px) {
   .todo-item {
     width: 93%;
@@ -283,6 +291,9 @@ input[type='checkbox']:focus {
   .addtodo-btn {
     width: 30%;
     height: 35px;
+  }
+  .text-save {
+    margin-right: 100px;
   }
 }
 
@@ -327,6 +338,15 @@ input[type='checkbox']:focus {
   }
   .todo-value {
     height: 54px;
+  }
+  .text-save {
+    margin-right: 300px;
+  }
+}
+
+@media only screen and (max-width: 646x) {
+  .text-save {
+    margin-right: 50px;
   }
 }
 
@@ -401,6 +421,9 @@ input[type='checkbox']:focus {
     width: 23px;
     height: 23px;
     opacity: 0.3;
+  }
+  .text-save {
+    margin-right: 200px;
   }
 }
 @media only screen and (max-width: 400px) {

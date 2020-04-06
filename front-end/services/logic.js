@@ -1,4 +1,5 @@
 const completefunc = (event) => {
+  myArr = [];
   let id = event.target.parentNode.id;
   let check = event.target.checked;
   let text = event.target.parentNode.children[1].innerText;
@@ -8,7 +9,8 @@ const completefunc = (event) => {
       text,
       check,
     })
-    .then(getTodos);
+    .then((res) => myArr.push(res.data))
+    .then(template);
 };
 
 const removefunc = (event) => {
@@ -75,10 +77,10 @@ const editfunc = () => {
   input.value = data;
   let div = document.createElement('div');
   div.className = 'text-save';
-  event.target.parentNode.className = 'hidden';
-  event.target.parentNode.parentNode.children[0].className = 'hidden';
+  event.target.parentNode.classList.add('hidden');
+  event.target.parentNode.parentNode.children[0].classList.add('hidden');
   event.target.parentNode.parentNode.children[0].checked = false;
-  event.target.parentNode.parentNode.children[1].className = 'hidden';
+  event.target.parentNode.parentNode.children[1].classList.add('hidden');
   div.append(input);
   div.append(save);
   event.target.parentNode.parentNode.append(div);

@@ -30,10 +30,11 @@ const loadFirstTime = () => {
 };
 
 const edfunc = () => {
-  let text = event.target.parentNode.parentNode.children[1].innerHTML;
+  myArr = [];
+  let text = event.target.parentNode.children[0].value;
   let check = event.target.parentNode.parentNode.children[0].checked;
   text.trim();
-  if (text.length) {
+  if (text.trim().length) {
     axios
       .patch(
         `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`,
@@ -42,6 +43,14 @@ const edfunc = () => {
           check,
         }
       )
-      .then(getTodos);
+      .then((res) => myArr.push(res.data))
+      .then(template);
+  } else {
+    event.target.parentNode.classList.remove('hidden');
+    event.target.parentNode.parentNode.children[0].classList.remove('hidden');
+    event.target.parentNode.parentNode.children[0].checked = false;
+    event.target.parentNode.parentNode.children[1].classList.remove('hidden');
+    event.target.parentNode.parentNode.children[2].className = 'images';
+    event.target.parentNode.parentNode.children[3].remove();
   }
 };
