@@ -31,22 +31,18 @@ function paginatedResults(model) {
     if (endIndex < (await model.countDocuments().exec())) {
       results.next = {
         page: page + 1,
-        limit: limit
+        limit: limit,
       };
     }
 
     if (startIndex > 0) {
       results.previous = {
         page: page - 1,
-        limit: limit
+        limit: limit,
       };
     }
     try {
-      results.results = await model
-        .find()
-        .limit(limit)
-        .skip(startIndex)
-        .exec();
+      results.results = await model.find().limit(limit).skip(startIndex).exec();
       res.paginatedResults = results;
       next();
     } catch (e) {
@@ -61,7 +57,7 @@ router.post('/', async (req, res) => {
 
   const item = new Item({
     value,
-    isCompleted
+    isCompleted,
   });
   try {
     const items = await item.save();
@@ -74,13 +70,16 @@ router.post('/', async (req, res) => {
 //Update Single item
 router.patch('/:id', async (req, res) => {
   try {
+    let arr = [];
+    arr.push(req.params.id);
+    console.log(arr);
     const editedItem = await Item.findByIdAndUpdate(
-      { _id: req.params.id },
+      { _id: arr.map((element) => element) },
       {
         $set: {
           value: req.body.text,
-          isCompleted: req.body.check
-        }
+          isCompleted: req.body.check,
+        },
       }
     );
     const items = await Item.find();
@@ -94,6 +93,20 @@ router.patch('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const removedItem = await Item.findByIdAndDelete(req.params.id);
+    res.send(removedItem);
+  } catch (err) {
+    res.send({ msg: err });
+  }
+});
+
+//Delete multiple items
+router.delete('/multiple/:id', async (req, res) => {
+  try {
+    const arr = await req.params.id.split(',');
+    const removedItem = await arr.map((element) => {
+      console.log(element);
+      Item.findByIdAndRemove(element);
+    });
     res.send(removedItem);
   } catch (err) {
     res.send({ msg: err });

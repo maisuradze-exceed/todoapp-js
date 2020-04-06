@@ -51,16 +51,16 @@ todoValue.addEventListener('keyup', (event) => {
 });
 
 const delcompfun = () => {
-  console.log(myArr[0]);
+  let arr = [];
   myArr[0].map((element) => {
     if (element.isCompleted) {
-      axios.delete(`http://localhost:3000/list/${element._id}`).then(
-        setTimeout(() => {
-          location.reload();
-        }, 300)
-      );
+      arr.push(element._id);
     }
   });
+
+  axios
+    .delete(`http://localhost:3000/list/multiple/${arr}`)
+    .then((res) => console.log(res));
 };
 
 const editfunc = () => {
