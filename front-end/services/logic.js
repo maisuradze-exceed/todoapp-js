@@ -14,38 +14,36 @@ const completefunc = (event) => {
 };
 
 const removefunc = (event) => {
+  myArr = [];
+  let page = current_page - 2;
   let main = document.querySelector('.todo-list');
   if (main.children.length === 1) {
     axios
       .delete(
         `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
       )
-      .then(
-        setTimeout(() => {
-          location.reload();
-        }, 300)
-      );
+      .then((res) => myArr.push(res.data))
+      .then(template)
+      .then(() => {
+        if (!item.length && myArr[0].length > 9) {
+          document.querySelector('.pagination').children[page].click();
+        }
+      });
   } else {
     axios
       .delete(
         `http://localhost:3000/list/${event.target.parentNode.parentNode.id}`
       )
-      .then(getTodos);
+      .then((res) => myArr.push(res.data))
+      .then(template);
   }
 };
 
 todoValue.addEventListener('keyup', (event) => {
   if (event.keyCode === 13 && todoValue.value.length) {
     if (todoValue.value.trim().length) {
-      if (main.childElementCount === 10) {
-        addTodos(todoValue.value);
-        let btn = document.querySelector('.pagination').childElementCount;
-        document.querySelector('.pagination').childNodes[btn - 1].click();
-        todoValue.value = '';
-      } else {
-        addTodos(todoValue.value);
-        todoValue.value = '';
-      }
+      addTodos(todoValue.value);
+      todoValue.value = '';
     } else {
       todoValue.value = '';
     }
@@ -59,10 +57,18 @@ const delcompfun = () => {
       arr.push(element._id);
     }
   });
-
-  axios.delete(`http://localhost:3000/list/multiple/${arr}`).then(() => {
-    location.reload();
-  });
+  myArr = [];
+  let page = current_page - 2;
+  axios
+    .delete(`http://localhost:3000/list/multiple/${arr}`)
+    .then((response) => myArr.push(response.data))
+    .then(template)
+    .then(() => {
+      item = document.querySelectorAll('.todo-item');
+      if (!item.length && myArr[0].length > 9) {
+        document.querySelector('.pagination').children[page].click();
+      }
+    });
 };
 
 const editfunc = () => {

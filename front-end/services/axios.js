@@ -17,7 +17,15 @@ const addTodos = (todovalue) => {
       value: todovalue,
     })
     .then((res) => myArr.push(res.data))
-    .then(template);
+    .then(template)
+    .then(() => {
+      let check = document.querySelectorAll('.todo-item');
+      console.log(check);
+      if (check.length === 10) {
+        let btn = document.querySelector('.pagination').childElementCount;
+        document.querySelector('.pagination').childNodes[btn - 1].click();
+      }
+    });
 };
 
 const loadFirstTime = () => {

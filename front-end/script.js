@@ -52,6 +52,7 @@ const delcomplete = () => {
 //Complete All
 const allComplete = () => {
   allCompleteBtn.addEventListener('click', () => {
+    myArr = [];
     item = document.querySelectorAll('.todo-item');
     let arr = [];
     item.forEach((element) => {
@@ -65,21 +66,15 @@ const allComplete = () => {
         .patch(`http://localhost:3000/list/multiple/${arr}`, {
           check: true,
         })
-        .then(
-          setTimeout(() => {
-            location.reload();
-          }, 200)
-        );
+        .then((response) => myArr.push(response.data))
+        .then(template);
     } else {
       axios
         .patch(`http://localhost:3000/list/multiple/${arr}`, {
           check: false,
         })
-        .then(
-          setTimeout(() => {
-            location.reload();
-          }, 200)
-        );
+        .then((response) => myArr.push(response.data))
+        .then(template);
     }
   });
 };
@@ -159,6 +154,11 @@ function paginationBtn(page, items) {
     current_page = page;
     displayList(items, main, 10, current_page);
     check();
+    remove();
+    edit();
+    complete();
+    delcomplete();
+    empty();
 
     let current_btn = document.querySelector('.active');
     if (current_btn) {

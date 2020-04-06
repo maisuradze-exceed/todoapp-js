@@ -98,8 +98,8 @@ router.patch('/multiple/:id', async (req, res) => {
         isCompleted: req.body.check,
       },
     });
-    res.send(Item.find());
-    // res.json(items);
+    const data = await Item.find();
+    res.send(data);
   } catch (err) {
     res.send({ msg: err });
   }
@@ -109,7 +109,8 @@ router.patch('/multiple/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const removedItem = await Item.findByIdAndDelete(req.params.id);
-    res.send(removedItem);
+    const data = await Item.find();
+    res.send(data);
   } catch (err) {
     res.send({ msg: err });
   }
@@ -121,7 +122,8 @@ router.delete('/multiple/:id', async (req, res) => {
     const arr = await req.params.id.split(',');
     const myquery = { _id: { $in: arr } };
     const removedItem = await Item.deleteMany(myquery);
-    res.send(removedItem);
+    const data = await Item.find();
+    res.send(data);
   } catch (err) {
     res.send({ msg: err });
   }
